@@ -39,9 +39,6 @@ export BROWSERSTACK_USERNAME=YOUR-BROWSERSTACK-USERNAME
 &nbsp;
 export BROWSERSTACK_ACCESSKEY=YOUR-BROWSERSTACK-ACCESSKEY
 
-
-&nbsp;
-&nbsp;
 &nbsp;
 &nbsp;
 <p>You could also pass <u>BROWSERSTACK-USERNAME</u> AND <u>BROWSERSTACK-ACCESS-KEY</u> in driverfactory.js in the form of hard coded string.</p>
