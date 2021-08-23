@@ -1,80 +1,42 @@
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const webdriver = require('selenium-webdriver');
 const browserstack = require('browserstack-local');
+const Driverfactory = require('./driverfactory');
+const Teardown = require('./teardown')
 
 
 async function local() {
 
   // Creates an instance of Local
-  const bs_local = new browserstack.Local()
+  var bs_local = await Driverfactory.startLocal()
 
-  // You can also set an environment variable - "BROWSERSTACK_ACCESS_KEY".
-  const bs_local_args = { key: 'BROWSERSTACK_ACCESSKEY' }
-
-  // Starts the Local instance with the required arguments
-  bs_local.start(bs_local_args, function () {
-    console.log('Started BrowserStackLocal')
-  })
-        
+  //Adding some sleep
   await sleep(5000);
 
-  let driver = await driverfactory1('Local Test')
+  //Create the Driver Instance 
+  let driver = await Driverfactory.createDriver('Local Test')
 
+  //Visiting a locally hosted URL
   await driver.get('http://localhost:3000/');
 
+  //Adding some sleep
   await sleep(10000);
 
-  
-  await teardown(driver, 'Local Test', bs_local)
-  // Your test code goes here, from creating the driver instance till the end, i.e. driver.quit
-  // Stop the Local instance after your test run is completed, i.e after driver.quit
-  /*
-  await driver.quit()
-
-  bs_local.stop(function () {
-    console.log('Stopped BrowserStackLocal')
-  });
-  */
+  //Calling Teardown method to mark test and close Local Binary Instance
+  await Teardown.teardown(driver, 'Local Test', bs_local)
     
 }
 
-async function driverfactory1(x) {
 
-    const capabilities = {
-        'os' : 'Windows',
-        'browserName' : 'Chrome',
-        'name': x, // test name
-        'build': 'JEST+SELENIUM', // CI/CD job or build name
-        'browserstack.local': 'true'
-       }
-    let driver = new webdriver.Builder()
-        .usingServer('http://BROWSERSTACK_USERNAME:BROWSERSTACK_ACCESSKEY@hub-cloud.browserstack.com/wd/hub')
-        .withCapabilities(capabilities)
-        .build();
-    return driver;
-
-}
-
-
-async function teardown(driver,reason,bs_local){
-
-  let teststatus = reason + " was successful"
-  await driver.executeScript(
-      'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason":"'+teststatus+'"}}'
-    );
-
-  await driver.quit();
-  await bs_local.stop(function () {
-  });
-
-}
-
+//Function for making webdriver sleep
 function sleep(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
 }  
 
+
+//Exporting Modules
 module.exports = {
     local
 }

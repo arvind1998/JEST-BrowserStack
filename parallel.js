@@ -1,10 +1,12 @@
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const webdriver = require('selenium-webdriver');
+const Driverfactory = require('./driverfactory');
+const Teardown = require('./teardown')
 
 async function add(x, y) {
 
         //Getting WebDriver Instance Through DriverFactory Function
-        let driver = await driverfactory("Addition Test");
+        let driver = await Driverfactory.createDriver("Addition Test")
 
         //Going To Google
         await driver.get('http://www.google.com/ncr');
@@ -15,11 +17,6 @@ async function add(x, y) {
         //Pass 1st Parameter in Calculator and Click it
         let num1 =  await driver.findElement(By.xpath("//*[text()="+String(x)+"]"))
         await num1.click();
-        
-        /*
-        const actions = await driver.actions();
-        await actions.click(num1);
-        */
 
         //Find add Button and Click on it
         let addition =  await driver.findElement(By.xpath('//*[@id="rso"]/div[1]/div/div/div[1]/div/div/div[3]/div/table[2]/tbody/tr[5]/td[4]/div/div'));
@@ -37,7 +34,7 @@ async function add(x, y) {
         let result = await (await driver.findElement(By.id('cwos'))).getText();
 
         
-        await teardown(driver,"Addition");
+        await Teardown.teardown(driver, "Addition")
         return result; 
 
 }
@@ -47,7 +44,7 @@ async function add(x, y) {
 async function subtract(x, y) {
 
         //Getting WebDriver Instance Through DriverFactory Function
-        let driver = await driverfactory("Subtraction Test");
+        let driver = await Driverfactory.createDriver("Subtraction Test")
 
         //Going To Google
         await driver.get('http://www.google.com/ncr');
@@ -74,7 +71,7 @@ async function subtract(x, y) {
         //Fetch Result that is Generated
         let result = await (await driver.findElement(By.id('cwos'))).getText();
 
-        await teardown(driver,"Subtraction");
+        await Teardown.teardown(driver, "Subtraction")
         return result; 
 
 }
@@ -83,7 +80,7 @@ async function subtract(x, y) {
 async function multiply(x, y) {
 
         //Getting WebDriver Instance Through DriverFactory Function
-        let driver = await driverfactory("Multiplication Test");
+        let driver = await Driverfactory.createDriver("Multiplication Test")
 
         //Going To Google
         await driver.get('http://www.google.com/ncr');
@@ -110,7 +107,7 @@ async function multiply(x, y) {
         //Fetch Result that is Generated
         let result = await (await driver.findElement(By.id('cwos'))).getText();
 
-        await teardown(driver,"Multiplication");
+        await Teardown.teardown(driver, "Multiplication")
         return result; 
 
 }
@@ -119,7 +116,7 @@ async function multiply(x, y) {
 async function divide(x, y) {
 
         //Getting WebDriver Instance Through DriverFactory Function
-        let driver = await driverfactory("Division Test");
+        let driver = await Driverfactory.createDriver("Division Test")
 
         //Going To Google
         await driver.get('http://www.google.com/ncr');
@@ -146,41 +143,11 @@ async function divide(x, y) {
         //Fetch Result that is Generated
         let result = await (await driver.findElement(By.id('cwos'))).getText();
 
-        await teardown(driver, "Division"); 
+        await Teardown.teardown(driver, "Division")
         return result; 
 
 
 }
-
-
-async function driverfactory(x) {
-
-    const capabilities = {
-        'os' : 'Windows',
-        'browserName' : 'Chrome',
-        'name': x, // test name
-        'build': 'JEST+SELENIUM' // CI/CD job or build name
-       }
-         let driver = new webdriver.Builder()
-           .usingServer('http://BROWSERSTACK_USERNAME:BROWSERSTACK_ACCESSKEY@hub-cloud.browserstack.com/wd/hub')
-           .withCapabilities(capabilities)
-           .build();
-       return driver;
-
-}
-
-
-async function teardown(driver,reason){
-
-    let teststatus = reason + " was successful"
-    await driver.executeScript(
-        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason":"'+teststatus+'"}}'
-      );
-
-    driver.quit();
-
-}
-
 
 module.exports = {
     subtract,

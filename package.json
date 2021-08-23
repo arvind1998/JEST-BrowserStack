@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "parallel": "jest parallel.test.js --maxConcurrency=4 --detectOpenHandles",
-    "single": "jest single.test.js --maxConcurrency=4 --detectOpenHandles",
-    "local": "jest local.test.js --maxConcurrency=4 --detectOpenHandles"
+    "single": "jest single.test.js --maxConcurrency=1 --detectOpenHandles",
+    "local": "jest local.test.js --maxConcurrency=1 --detectOpenHandles"
   },
   "keywords": [],
   "author": "",

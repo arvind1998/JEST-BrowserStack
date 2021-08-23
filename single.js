@@ -1,10 +1,11 @@
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const webdriver = require('selenium-webdriver');
+const Driverfactory = require('./driverfactory');
+const Teardown = require('./teardown')
 
 async function SingleTestAddition(x, y) {
 
-    //Getting WebDriver Instance Through DriverFactory Function
-    let driver = await driverfactory("Addition Test");
+    let driver = await Driverfactory.createDriver("Addition Test")
 
     //Going To Google
     await driver.get('http://www.google.com/ncr');
@@ -31,35 +32,10 @@ async function SingleTestAddition(x, y) {
     //Fetch Result that is Generated
     let result = await (await driver.findElement(By.id('cwos'))).getText();
     
-    await teardown(driver,"Addition");
+    //await teardown(driver,"Addition");
+    await Teardown.teardown(driver, "Addition")
+
     return result; 
-
-}
-
-async function driverfactory(x) {
-
-    const capabilities = {
-        'os' : 'Windows',
-        'browserName' : 'Chrome',
-        'name': x, // test name
-        'build': 'JEST+SELENIUM' // CI/CD job or build name
-    }
-    let driver = new webdriver.Builder()
-        .usingServer('http://BROWSERSTACK_USERNAME:BROWSERSTACK_ACCESSKEY@hub-cloud.browserstack.com/wd/hub')
-        .withCapabilities(capabilities)
-        .build();
-    return driver;
-
-}
-
-
-async function teardown(driver,reason){
-
-    let teststatus = reason + " was successful"
-    await driver.executeScript(
-        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason":"'+teststatus+'"}}'
-      );
-    driver.quit();
 
 }
 
