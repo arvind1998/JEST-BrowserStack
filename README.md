@@ -90,7 +90,7 @@ npm run parallel
 
 
 
-npm run parallel
+npm run local
 </ul>
 
 <br>
