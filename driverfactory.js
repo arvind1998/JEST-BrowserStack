@@ -21,12 +21,16 @@ if(x === 'Local Test'){
 
 //If test is not a Local Test, do this
 else{
+    
     var capabilities = {
         'os' : 'Windows',//OS Name
         'browserName' : 'Chrome',//BrowserName
-        'name': x, //test name
-        'build': 'JEST+SELENIUM', //CI/CD job or build name
+        'name': x //CI/CD job or build name
     }
+    if (process.env.BROWSERSTACK_BUILD_NAME == null)
+        capabilities['build'] = 'JEST+SELENIUM'
+    else
+        capabilities['build'] = process.env.BROWSERSTACK_BUILD_NAME
 }
 
    
