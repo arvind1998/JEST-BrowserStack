@@ -12,6 +12,8 @@ steps:
 - task: BrowserStackConfig@0
   inputs:
     BrowserStackServiceEndPoint: 'azure-bstack'
+    browserstackLocal: true
+    bsLocalOptions: '{"forceProxy" : "true"}'
 
 - script: |
     npm install
