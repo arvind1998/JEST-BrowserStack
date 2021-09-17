@@ -1,0 +1,23 @@
+trigger:
+- azure
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.17'
+  displayName: 'Install Node.js'
+- task: BrowserStackConfig@0
+  inputs:
+    BrowserStackServiceEndPoint: 'azure-bstack'
+
+- script: |
+    npm install
+    npm run parallel
+  displayName: 'npm install and build'
+
+- task: BrowserStackResults@1
+  inputs:
+   browserstackProduct: 'automate'
