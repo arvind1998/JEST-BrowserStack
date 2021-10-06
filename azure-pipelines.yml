@@ -13,15 +13,15 @@ steps:
 - task: BrowserStackConfig@0
   inputs:
     BrowserStackServiceEndPoint: 'azure-bstack'
-    browserstackLocal: true
+    # browserstackLocal: true
 
 - script: |
     npm install
     npm run parallel
   displayName: 'npm install and build'
   
-- task: BrowserStackStopLocal@0
-  displayName: 'BrowserStack Stop Local'
+# - task: BrowserStackStopLocal@0
+#   displayName: 'BrowserStack Stop Local'
 
 - task: BrowserStackResults@1
   inputs:
