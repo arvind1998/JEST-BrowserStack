@@ -1,3 +1,4 @@
+
 trigger:
 - azure
 
@@ -11,13 +12,16 @@ steps:
   displayName: 'Install Node.js'
 - task: BrowserStackConfig@0
   inputs:
-    BrowserStackServiceEndPoint: 'azure-bstack'
-    
+    BrowserStackServiceEndPoint: 'browserstack-endpoint'
+    browserstackLocal: true
 
 - script: |
     npm install
     npm run parallel
   displayName: 'npm install and build'
+  
+- task: BrowserStackStopLocal@0
+  displayName: 'BrowserStack Stop Local'
 
 - task: BrowserStackResults@1
   inputs:
