@@ -12,7 +12,7 @@ steps:
   displayName: 'Install Node.js'
 - task: BrowserStackConfig@0
   inputs:
-    BrowserStackServiceEndPoint: 'browserstack-endpoint'
+    BrowserStackServiceEndPoint: 'azure-bstack'
     browserstackLocal: true
 
 - script: |
